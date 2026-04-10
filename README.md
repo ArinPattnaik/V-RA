@@ -55,40 +55,6 @@ graph TD
     NodeAPI -->|Final Analysis| NextJS
 ```
 
-## 🏗️ Getting Started
-
-### Prerequisites
-
--   Node.js (v18+)
--   Python (v3.10+)
--   Docker (Optional, for containerized deployment)
--   [ScraperAPI Key](https://www.scraperapi.com/)
-
-### 1. ML Service (Python)
-```bash
-cd ml-service
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-pip install -r requirements.txt
-python main.py
-```
-
-### 2. Backend API (Node.js)
-```bash
-cd backend
-npm install
-# Create a .env file with:
-# SCRAPER_API_KEY=your_key_here
-# ML_SERVICE_URL=http://localhost:8000
-npm start
-```
-
-### 3. Frontend (Next.js)
-```bash
-cd frontend
-npm install
-npm run dev
-```
 
 ## 📝 License
 
