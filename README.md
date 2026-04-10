@@ -6,7 +6,6 @@
 
 [![Live Demo](https://img.shields.io/badge/🌿_Live_Demo-Visit_VÉRA-00ff88?style=for-the-badge)](https://frontend-iota-self-92.vercel.app)
 
-[![Release](https://img.shields.io/github/v/release/ArinPattnaik/V-RA?style=flat-square&color=00ff88)](https://github.com/ArinPattnaik/V-RA/releases)
 [![License](https://img.shields.io/badge/License-MIT-white?style=flat-square)](LICENSE)
 
 ---
