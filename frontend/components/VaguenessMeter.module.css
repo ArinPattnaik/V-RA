@@ -1,0 +1,76 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+/* ── Gauge ── */
+.gaugeWrapper {
+  position: relative;
+}
+
+.gauge {
+  display: block;
+}
+
+.progressArc {
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+
+.gaugeValue {
+  fill: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.gaugeLabel {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ── Phrases ── */
+.phrases {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.phrasesTitle {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.phrasesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.phrase {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--accent-violet);
+}
+
+.moreCount {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}

@@ -1,0 +1,112 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xl);
+  padding: var(--space-4xl) 0;
+  min-height: 60vh;
+  justify-content: center;
+}
+
+/* ── Scanner Visual ── */
+.scannerVisual {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+
+.scanRing {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(0, 255, 136, 0.15);
+  border-radius: 50%;
+  animation: rotate-slow 3s linear infinite;
+}
+
+.scanRingInner {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.scanLine {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+  transform: translateY(-50%);
+  animation: scan-pulse 2s ease-in-out infinite;
+}
+
+@keyframes scan-pulse {
+  0%, 100% { opacity: 0.3; transform: translateY(-50%) scaleX(0.5); }
+  50% { opacity: 1; transform: translateY(-50%) scaleX(1); }
+}
+
+.scanPulse {
+  position: absolute;
+  inset: 20%;
+  border: 1px solid rgba(0, 255, 136, 0.1);
+  border-radius: 50%;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* ── Steps ── */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  opacity: 0;
+  animation: step-appear 0.5s ease forwards;
+}
+
+@keyframes step-appear {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.stepDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  flex-shrink: 0;
+  animation: dot-pulse 1s ease infinite;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}

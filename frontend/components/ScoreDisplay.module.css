@@ -1,0 +1,121 @@
+.container {
+  text-align: center;
+  padding: var(--space-4xl) 0;
+  position: relative;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Ambient Glow ── */
+.ambientGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  z-index: 0;
+}
+
+/* ── Score ── */
+.scoreWrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: var(--space-md);
+}
+
+.score {
+  font-family: var(--font-heading);
+  font-size: clamp(100px, 20vw, 220px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  transition: color 0.5s ease;
+}
+
+.outOf {
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 4vw, 48px);
+  font-weight: 300;
+  color: var(--text-tertiary);
+  letter-spacing: -0.02em;
+}
+
+/* ── Label ── */
+.label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-heading);
+  font-size: clamp(16px, 2.5vw, 24px);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: var(--space-xl);
+}
+
+/* ── Verdict ── */
+.verdict {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto var(--space-2xl);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  padding: 0 var(--space-lg);
+}
+
+/* ── Confidence ── */
+.confidence {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.confidenceLabel {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.confidenceBar {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.confidenceFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
+}
+
+.confidenceValue {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+  min-width: 32px;
+  text-align: right;
+}
