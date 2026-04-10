@@ -91,7 +91,7 @@ export default function VaguenessMeter({ score, phrases }) {
           <div className={styles.phrasesList}>
             {phrases.slice(0, 6).map((p, i) => (
               <span key={i} className={styles.phrase}>
-                "{p.phrase}"
+                &quot;{p.phrase}&quot;
               </span>
             ))}
             {phrases.length > 6 && (

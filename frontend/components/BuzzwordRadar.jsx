@@ -62,7 +62,7 @@ export default function BuzzwordRadar({ buzzwords }) {
               {terms.map((term, i) => (
                 <div key={i} className={styles.term}>
                   <div className={styles.termHeader}>
-                    <span className={styles.termText}>"{term.term}"</span>
+                    <span className={styles.termText}>&quot;{term.term}&quot;</span>
                     <div className={styles.severityDots}>
                       {Array.from({ length: 5 }).map((_, j) => (
                         <span

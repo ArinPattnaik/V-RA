@@ -114,7 +114,7 @@ export default function Home() {
           </h1>
 
           <p className={styles.heroSubtitle}>
-            See through fast fashion's eco-marketing.
+            See through fast fashion&apos;s eco-marketing.
             <br />
             Paste a product link. Get the <span className={styles.highlight}>True Eco-Score</span>.
           </p>

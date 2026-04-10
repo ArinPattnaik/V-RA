@@ -11,7 +11,10 @@ const { ProductScraper, RETAILER_CONFIGS } = require("./scraper");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://localhost:8000";
+let ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://localhost:8000";
+if (process.env.ML_SERVICE_URL && !process.env.ML_SERVICE_URL.startsWith("http")) {
+  ML_SERVICE_URL = `http://${process.env.ML_SERVICE_URL}`;
+}
 
 // ── Middleware ──
 app.use(cors());
