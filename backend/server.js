@@ -95,7 +95,7 @@ app.post("/api/analyze", async (req, res) => {
       materials: materials,
       brand: detectedBrand,
     }, {
-      timeout: 30000,
+      timeout: 90000,
     });
 
     if (!mlResponse.data.success) {
@@ -143,7 +143,7 @@ app.post("/api/analyze/demo", async (req, res) => {
     const mlResponse = await axios.post(`${ML_SERVICE_URL}/analyze/demo`, {
       product_id,
     }, {
-      timeout: 30000,
+      timeout: 90000,
     });
 
     return res.json({
