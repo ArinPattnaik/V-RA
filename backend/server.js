@@ -40,7 +40,15 @@ const scraper = new ProductScraper();
  * Main endpoint — accepts a URL or raw text, returns greenwashing analysis.
  */
 app.post("/api/analyze", async (req, res) => {
-  const { url, text, brand } = req.body;
+  const { text, brand } = req.body;
+  let url = req.body.url;
+
+  if (url && typeof url === "string") {
+    url = url.trim();
+    if (!url.startsWith("http")) {
+      url = `https://${url}`;
+    }
+  }
 
   if (!url && !text) {
     return res.status(400).json({
