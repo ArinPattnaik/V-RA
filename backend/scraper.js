@@ -144,17 +144,25 @@ class ProductScraper {
 
     // Use ScraperAPI if available
     if (process.env.SCRAPER_API_KEY) {
-      fetchUrl = `http://api.scraperapi.com?api_key=${process.env.SCRAPER_API_KEY}&url=${encodeURIComponent(url)}&render=true`;
-      console.log(`[HTTP] Routing request via ScraperAPI...`);
+      // Removing render=true as it consumes 5x credits and often causes 429 on free tier
+      fetchUrl = `http://api.scraperapi.com?api_key=${process.env.SCRAPER_API_KEY}&url=${encodeURIComponent(url)}`;
+      console.log(`[HTTP] Routing request via ScraperAPI without JS rendering...`);
       // Delete custom headers when using ScraperAPI so we don't interfere with their anti-bot evasion
       delete axiosConfig.headers;
-      // Increase timeout for ScraperAPI as proxying + js rendering takes longer
       axiosConfig.timeout = 60000;
     }
 
-    const response = await axios.get(fetchUrl, axiosConfig);
-
-    return cheerio.load(response.data);
+    try {
+      const response = await axios.get(fetchUrl, axiosConfig);
+      return cheerio.load(response.data);
+    } catch (err) {
+      console.error(`[HTTP] Request failed: ${err.message}`);
+      if (err.response) {
+        console.error(`[HTTP] Status: ${err.response.status}`);
+        console.error(`[HTTP] Data:`, err.response.data);
+      }
+      throw err;
+    }
   }
 
   /**
