@@ -1,181 +1,107 @@
-# VÉRA — Greenwashing NLP Scanner
-
 <div align="center">
 
-**See through fast fashion's eco-marketing.**
+# VÉRA
 
-[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=flat-square&logo=node.js)](https://nodejs.org/)
-[![spaCy](https://img.shields.io/badge/spaCy-3.8-09A3D5?style=flat-square)](https://spacy.io/)
-[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python)](https://python.org/)
+### See Through the Greenwash.
+
+[![Live Demo](https://img.shields.io/badge/🌿_Live_Demo-Visit_VÉRA-00ff88?style=for-the-badge)](https://frontend-iota-self-92.vercel.app)
+
+[![Release](https://img.shields.io/github/v/release/ArinPattnaik/V-RA?style=flat-square&color=00ff88)](https://github.com/ArinPattnaik/V-RA/releases)
+[![License](https://img.shields.io/badge/License-MIT-white?style=flat-square)](LICENSE)
+
+---
+
+**VÉRA is an NLP-powered greenwashing scanner for the fashion industry.**
+Paste a product link from any major retailer — get the truth behind the eco-marketing.
+
+[**→ Try VÉRA Live**](https://frontend-iota-self-92.vercel.app)
 
 </div>
 
 ---
 
-## 🌿 What is VÉRA?
+## The Problem
 
-VÉRA is a web application that exposes greenwashing in the fashion industry. Users paste a product link or description, and VÉRA's NLP engine:
+Fast fashion brands spend millions on "eco-friendly" marketing — but most of it is greenwashing. Terms like _"sustainable"_, _"conscious"_, and _"planet-friendly"_ have no legal definition. Consumers have no way to tell real sustainability from marketing spin.
 
-1. **Scrapes** product data from major retailers (H&M, Zara, ASOS, SHEIN, Nike, Adidas, Uniqlo)
-2. **Analyzes** marketing text using a 7-stage NLP pipeline
-3. **Cross-references** against a sustainability database of 40+ materials, 80+ greenwashing buzzwords, and 15+ certifications
-4. **Delivers** a **True Eco-Score** (0-10) with a stunning visual breakdown
+## What VÉRA Does
 
----
+Paste a product URL or description from **H&M, Zara, ASOS, SHEIN, Nike, Adidas, Uniqlo** — or any public product page — and VÉRA will:
 
-## 🏗️ Architecture
+🔍 **Scrape** the product page for material data and marketing claims
 
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│                 │     │                 │     │                 │
-│   Next.js 14    │────▶│   Node.js API   │────▶│  FastAPI + NLP  │
-│   Frontend      │     │   + Puppeteer   │     │  Microservice   │
-│   (Vercel)      │     │   (Render)      │     │  (Render)       │
-│                 │     │                 │     │                 │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                              │                        │
-                              ▼                        ▼
-                        Fashion Retailers     Sustainability DB
-                        (H&M, Zara, ...)     (Materials, Certs,
-                                              Brands, Buzzwords)
-```
+🧠 **Analyze** the text with a 7-stage NLP pipeline to detect deceptive language
 
----
+📊 **Score** the product on a 0–10 **True Eco-Score** by cross-referencing:
+- **40+** material sustainability scores
+- **80+** greenwashing buzzwords with severity levels
+- **15+** eco-certifications (real vs. self-invented)
+- **10+** brand carbon footprint histories
 
-## 🔬 NLP Pipeline
+📋 **Deliver** a visual breakdown:
 
-| Stage | Process | Details |
-|:---:|:---|:---|
-| 1 | **Material Extraction** | spaCy + regex → extracts material composition percentages |
-| 2 | **Buzzword Detection** | 80+ taxonomy of greenwashing terms with severity scoring |
-| 3 | **Certification Validation** | Cross-references against 15+ legitimate eco-certifications |
-| 4 | **Vagueness Analysis** | Detects hedging language ("up to", "working towards", etc.) |
-| 5 | **Brand Enrichment** | Adds carbon footprint data for 10+ major brands |
-| 6 | **Score Synthesis** | Weighted formula: Materials (35%) + Buzzwords (25%) + Certs (20%) + Clarity (20%) |
-| 7 | **Verdict Generation** | Human-readable summary of the product's true sustainability |
+<div align="center">
+
+| Component | What It Shows |
+|:---|:---|
+| **True Eco-Score** | Massive animated 0–10 score with color-coded verdict |
+| **Material Chart** | Composition breakdown with sustainability ratings per material |
+| **Greenwashing Radar** | Every detected buzzword, categorized by type and severity |
+| **Vagueness Meter** | How much hedging language the brand uses |
+| **Certification Check** | Verified certifications vs. self-invented labels |
+| **Carbon Timeline** | Brand's historical carbon footprint with trend direction |
+
+</div>
 
 ---
 
-## 🎨 UI/UX Design
+## Demo Mode
 
-- **Pure black** background with noise texture overlay
-- **Massive bold typography** score (100-220px) with animated counter
-- **Bento grid** layout for the analysis breakdown
-- **Glassmorphism** cards with hover micro-animations
-- **Color-coded** eco-spectrum (green → yellow → red)
-- **Scroll-triggered** animations via Intersection Observer
-- **Space Grotesk** + **Inter** typography from Google Fonts
+No URL needed — try the built-in showcase with 4 pre-analyzed products:
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- Python 3.11+
-- pip
-
-### 1. ML Microservice
-
-```bash
-cd ml-service
-pip install -r requirements.txt
-python -m spacy download en_core_web_sm
-uvicorn main:app --reload --port 8000
-```
-
-### 2. Backend API
-
-```bash
-cd backend
-npm install
-node server.js
-```
-
-### 3. Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) — the app is ready!
+| Product | Brand | Verdict |
+|:---|:---|:---|
+| Conscious Choice Oversized T-Shirt | H&M | 🔴 Heavy Greenwashing |
+| Regenerative Organic Cotton Tee | Patagonia | 🟢 Genuinely Sustainable |
+| EcoWave Wide Leg Pants | SHEIN | 🔴 Heavy Greenwashing |
+| Join Life Textured Blazer | Zara | 🟡 Mixed Signals |
 
 ---
 
-## 📦 Deployment
+## How Scoring Works
 
-### Frontend → Vercel
-- Connect the `frontend/` directory to Vercel
-- Set `NEXT_PUBLIC_API_URL` to your Render backend URL
+The **True Eco-Score** is a weighted composite:
 
-### Backend + ML Service → Render
-- Deploy each service as a Docker Web Service
-- Set `ML_SERVICE_URL` on the backend to point to the ML service
+| Factor | Weight | What It Measures |
+|:---:|:---:|:---|
+| Materials | 35% | Actual sustainability of the fabrics used |
+| Buzzwords | 25% | Density of deceptive marketing language |
+| Certifications | 20% | Real third-party certifications vs. invented labels |
+| Clarity | 20% | Specificity of claims — vague vs. concrete |
 
----
-
-## 📁 Project Structure
-
-```
-VÉRA/
-├── ml-service/           # Python FastAPI + spaCy
-│   ├── main.py           # API endpoints
-│   ├── analyzer.py       # NLP greenwashing analyzer
-│   ├── sustainability_db.py  # Materials, buzzwords, certs, brands
-│   ├── requirements.txt
-│   └── Dockerfile
-├── backend/              # Node.js Express + Puppeteer
-│   ├── server.js         # API orchestration
-│   ├── scraper.js        # Retailer-specific web scraper
-│   ├── package.json
-│   └── Dockerfile
-├── frontend/             # Next.js 14
-│   ├── app/
-│   │   ├── page.js       # Main scanner page
-│   │   ├── layout.js     # Root layout
-│   │   ├── globals.css   # Design system
-│   │   └── page.module.css
-│   └── components/
-│       ├── ScannerInput.jsx
-│       ├── ScoreDisplay.jsx
-│       ├── MaterialChart.jsx
-│       ├── BuzzwordRadar.jsx
-│       ├── CarbonTimeline.jsx
-│       ├── VaguenessMeter.jsx
-│       ├── CertificationCard.jsx
-│       └── LoadingScreen.jsx
-├── .gitignore
-└── README.md
-```
+Scores range from **0** (pure greenwashing) to **10** (genuinely sustainable).
 
 ---
 
-## 🛡️ Demo Mode
+## Tech Stack
 
-VÉRA includes 4 pre-loaded demo products to showcase the scanner without requiring live scraping:
-
-| Product | Brand | Expected Score |
-|:---|:---|:---:|
-| Conscious Choice T-Shirt | H&M | ~3.5 |
-| Regenerative Organic Cotton Tee | Patagonia | ~8.5 |
-| EcoWave Wide Leg Pants | SHEIN | ~1.5 |
-| Join Life Textured Blazer | Zara | ~5.0 |
-
----
-
-## 📜 License
-
-MIT
+| Layer | Technology |
+|:---|:---|
+| Frontend | Next.js 14, CSS Modules |
+| Backend API | Node.js, Express, Puppeteer |
+| NLP Engine | Python, FastAPI, spaCy |
+| Deployment | Vercel + Render (Docker) |
 
 ---
 
 <div align="center">
 
-**Built with 🌿 to fight greenwashing in fashion.**
+## [→ Try VÉRA Live](https://frontend-iota-self-92.vercel.app)
+
+**Stop trusting the label. Start reading the data.**
+
+---
+
+MIT License · Built to fight greenwashing in fashion.
 
 </div>
