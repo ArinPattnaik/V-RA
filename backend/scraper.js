@@ -149,45 +149,82 @@ class ProductScraper {
   async scrape(url) {
     const config = this._getRetailerConfig(url);
 
+    // Strategy 1: Direct HTTP fetch
     try {
-      console.log(`[SCRAPE] Fetching: ${url}`);
+      console.log(`[SCRAPE] Strategy 1 — Direct fetch: ${url}`);
       const $ = await this._fetchPage(url);
-
-      let result;
-
-      if (config) {
-        result = this._scrapeWithConfig($, config);
-      } else {
-        result = this._scrapeGeneric($, url);
-      }
+      const result = config
+        ? this._scrapeWithConfig($, config)
+        : this._scrapeGeneric($, url);
 
       result.url = url;
       result.scraped_at = new Date().toISOString();
 
-      return { success: true, data: result };
-    } catch (error) {
-      console.error(`[SCRAPE ERROR] ${error.message}`);
+      if (result.full_text && result.full_text.length > 20) {
+        return { success: true, data: result };
+      }
+    } catch (err) {
+      console.log(`[SCRAPE] Strategy 1 failed: ${err.message}`);
+    }
 
-      // If HTTP scrape fails, try extracting from meta tags / JSON-LD as last resort
-      try {
-        console.log(`[SCRAPE] Trying JSON-LD / meta fallback for: ${url}`);
-        const $ = await this._fetchPage(url);
-        const result = this._scrapeFromStructuredData($, config, url);
+    // Strategy 2: Try Google Web Cache
+    try {
+      const cacheUrl = `https://webcache.googleusercontent.com/search?q=cache:${encodeURIComponent(url)}`;
+      console.log(`[SCRAPE] Strategy 2 — Google Cache`);
+      const $ = await this._fetchPage(cacheUrl);
+      const result = config
+        ? this._scrapeWithConfig($, config)
+        : this._scrapeGeneric($, url);
 
-        if (result && result.full_text && result.full_text.length > 20) {
-          result.url = url;
-          result.scraped_at = new Date().toISOString();
+      result.url = url;
+      result.scraped_at = new Date().toISOString();
+
+      if (result.full_text && result.full_text.length > 20) {
+        return { success: true, data: result };
+      }
+    } catch (err) {
+      console.log(`[SCRAPE] Strategy 2 failed: ${err.message}`);
+    }
+
+    // Strategy 3: Try Wayback Machine latest snapshot
+    try {
+      console.log(`[SCRAPE] Strategy 3 — Wayback Machine`);
+      const apiRes = await axios.get(
+        `https://archive.org/wayback/available?url=${encodeURIComponent(url)}`,
+        { timeout: 10000 }
+      );
+      const snapshot = apiRes.data?.archived_snapshots?.closest;
+      if (snapshot && snapshot.available && snapshot.url) {
+        const $ = await this._fetchPage(snapshot.url);
+        const result = config
+          ? this._scrapeWithConfig($, config)
+          : this._scrapeGeneric($, url);
+
+        result.url = url;
+        result.scraped_at = new Date().toISOString();
+
+        if (result.full_text && result.full_text.length > 20) {
           return { success: true, data: result };
         }
-      } catch {}
-
-      return {
-        success: false,
-        error: error.message,
-        suggestion:
-          "Could not fetch this product page. Try pasting the product description manually.",
-      };
+      }
+    } catch (err) {
+      console.log(`[SCRAPE] Strategy 3 failed: ${err.message}`);
     }
+
+    // Strategy 4: Extract what we can from the URL itself
+    // (brand from domain, product name from slug)
+    console.log(`[SCRAPE] Strategy 4 — URL-based extraction`);
+    const urlData = this._extractFromUrl(url, config);
+    if (urlData.full_text && urlData.full_text.length > 10) {
+      return { success: true, data: urlData };
+    }
+
+    return {
+      success: false,
+      error: "All scraping strategies failed for this URL.",
+      suggestion:
+        "This retailer blocks automated access. Please paste the product description text manually using the 'Paste Text' tab.",
+    };
   }
 
   /**
@@ -376,6 +413,39 @@ class ProductScraper {
     } catch {
       return "";
     }
+  }
+  /**
+   * Extract what we can from the URL itself when all scraping fails.
+   * Parses the domain for brand and the URL slug for a rough product name.
+   */
+  _extractFromUrl(url, config) {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.replace("www.", "").replace("www2.", "");
+    const pathSegments = parsed.pathname
+      .split("/")
+      .filter(Boolean)
+      .map((s) => s.replace(/[-_]/g, " ").replace(/\.\w+$/, ""));
+
+    const brand = config ? config.brand : hostname.split(".")[0];
+    const retailer = config ? config.name : hostname;
+
+    // Try to build a product name from URL path
+    const productName = pathSegments
+      .filter((s) => s.length > 2 && !/^\d+$/.test(s) && !["en", "us", "in", "uk", "productpage", "product", "t", "p", "dp"].includes(s.toLowerCase()))
+      .join(" ");
+
+    const description = `${retailer} product: ${productName}. Brand: ${brand}.`;
+
+    return {
+      brand,
+      retailer,
+      name: productName || `${retailer} Product`,
+      description,
+      full_text: description,
+      materials: {},
+      url,
+      scraped_at: new Date().toISOString(),
+    };
   }
 
   /**
