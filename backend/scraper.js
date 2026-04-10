@@ -119,10 +119,12 @@ class ProductScraper {
 
   /**
    * Fetch a page and return the cheerio-parsed DOM.
+   * If SCRAPER_API_KEY is available, routes the request through ScraperAPI to bypass anti-bot.
    */
   async _fetchPage(url) {
-    const response = await axios.get(url, {
-      timeout: 20000,
+    let fetchUrl = url;
+    const axiosConfig = {
+      timeout: 30000,
       headers: {
         "User-Agent": getRandomUA(),
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -138,7 +140,19 @@ class ProductScraper {
       },
       maxRedirects: 5,
       validateStatus: (status) => status < 400,
-    });
+    };
+
+    // Use ScraperAPI if available
+    if (process.env.SCRAPER_API_KEY) {
+      fetchUrl = `http://api.scraperapi.com?api_key=${process.env.SCRAPER_API_KEY}&url=${encodeURIComponent(url)}&render=true`;
+      console.log(`[HTTP] Routing request via ScraperAPI...`);
+      // Delete custom headers when using ScraperAPI so we don't interfere with their anti-bot evasion
+      delete axiosConfig.headers;
+      // Increase timeout for ScraperAPI as proxying + js rendering takes longer
+      axiosConfig.timeout = 60000;
+    }
+
+    const response = await axios.get(fetchUrl, axiosConfig);
 
     return cheerio.load(response.data);
   }
