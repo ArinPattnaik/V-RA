@@ -1,0 +1,31 @@
+services:
+  # ── ML Microservice ──
+  - type: web
+    name: vera-ml
+    runtime: docker
+    dockerfilePath: ./ml-service/Dockerfile
+    dockerContext: ./ml-service
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8000
+
+  # ── Backend API ──
+  - type: web
+    name: vera-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: oregon
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: ML_SERVICE_URL
+        fromService:
+          name: vera-ml
+          type: web
+          property: hostport
