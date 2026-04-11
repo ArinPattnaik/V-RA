@@ -10,7 +10,7 @@ services:
     healthCheckPath: /health
     envVars:
       - key: PORT
-        value: 8000
+        value: "8000"
 
   # ── Backend API ──
   - type: web
@@ -23,7 +23,7 @@ services:
     healthCheckPath: /api/health
     envVars:
       - key: PORT
-        value: 3001
+        value: "3001"
       - key: ML_SERVICE_URL
         fromService:
           name: vera-ml
