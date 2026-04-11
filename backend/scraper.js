@@ -121,10 +121,10 @@ class ProductScraper {
    * Fetch a page and return the cheerio-parsed DOM.
    * If SCRAPER_API_KEY is available, routes the request through ScraperAPI to bypass anti-bot.
    */
-  async _fetchPage(url) {
+  async _fetchPage(url, useScraperApi = true) {
     let fetchUrl = url;
     const axiosConfig = {
-      timeout: 30000,
+      timeout: 25000,
       headers: {
         "User-Agent": getRandomUA(),
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -143,13 +143,13 @@ class ProductScraper {
     };
 
     // Use ScraperAPI if available
-    if (process.env.SCRAPER_API_KEY) {
+    if (useScraperApi && process.env.SCRAPER_API_KEY) {
       // Removing render=true as it consumes 5x credits and often causes 429 on free tier
       fetchUrl = `http://api.scraperapi.com?api_key=${process.env.SCRAPER_API_KEY}&url=${encodeURIComponent(url)}`;
       console.log(`[HTTP] Routing request via ScraperAPI without JS rendering...`);
       // Delete custom headers when using ScraperAPI so we don't interfere with their anti-bot evasion
       delete axiosConfig.headers;
-      axiosConfig.timeout = 60000;
+      axiosConfig.timeout = 40000; // Keep it under 40s to allow fallback execution within Render limit
     }
 
     try {
@@ -189,35 +189,16 @@ class ProductScraper {
       console.log(`[SCRAPE] Strategy 1 failed: ${err.message}`);
     }
 
-    // Strategy 2: Try Google Web Cache
+    // Strategy 2: Try Wayback Machine latest snapshot
     try {
-      const cacheUrl = `https://webcache.googleusercontent.com/search?q=cache:${encodeURIComponent(url)}`;
-      console.log(`[SCRAPE] Strategy 2 — Google Cache`);
-      const $ = await this._fetchPage(cacheUrl);
-      const result = config
-        ? this._scrapeWithConfig($, config)
-        : this._scrapeGeneric($, url);
-
-      result.url = url;
-      result.scraped_at = new Date().toISOString();
-
-      if (result.full_text && result.full_text.length > 20) {
-        return { success: true, data: result };
-      }
-    } catch (err) {
-      console.log(`[SCRAPE] Strategy 2 failed: ${err.message}`);
-    }
-
-    // Strategy 3: Try Wayback Machine latest snapshot
-    try {
-      console.log(`[SCRAPE] Strategy 3 — Wayback Machine`);
+      console.log(`[SCRAPE] Strategy 2 — Wayback Machine`);
       const apiRes = await axios.get(
         `https://archive.org/wayback/available?url=${encodeURIComponent(url)}`,
         { timeout: 10000 }
       );
       const snapshot = apiRes.data?.archived_snapshots?.closest;
       if (snapshot && snapshot.available && snapshot.url) {
-        const $ = await this._fetchPage(snapshot.url);
+        const $ = await this._fetchPage(snapshot.url, false);
         const result = config
           ? this._scrapeWithConfig($, config)
           : this._scrapeGeneric($, url);
@@ -230,12 +211,12 @@ class ProductScraper {
         }
       }
     } catch (err) {
-      console.log(`[SCRAPE] Strategy 3 failed: ${err.message}`);
+      console.log(`[SCRAPE] Strategy 2 failed: ${err.message}`);
     }
 
-    // Strategy 4: Extract what we can from the URL itself
+    // Strategy 3: Extract what we can from the URL itself
     // (brand from domain, product name from slug)
-    console.log(`[SCRAPE] Strategy 4 — URL-based extraction`);
+    console.log(`[SCRAPE] Strategy 3 — URL-based extraction`);
     const urlData = this._extractFromUrl(url, config);
     if (urlData.full_text && urlData.full_text.length > 10) {
       return { success: true, data: urlData };
