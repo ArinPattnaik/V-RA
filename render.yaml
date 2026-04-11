@@ -3,6 +3,8 @@ services:
   - type: web
     name: vera-ml
     runtime: docker
+    branch: main
+    autoDeploy: true
     dockerfilePath: ./ml-service/Dockerfile
     dockerContext: ./ml-service
     plan: free
@@ -16,6 +18,8 @@ services:
   - type: web
     name: vera-backend
     runtime: docker
+    branch: main
+    autoDeploy: true
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     plan: free
