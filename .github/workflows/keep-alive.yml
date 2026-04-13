@@ -1,0 +1,18 @@
+name: Keep VÉRA Backend Awake
+
+on:
+  schedule:
+    # Runs every 14 minutes to prevent Render's 15-minute free tier spin-down
+    - cron: '*/14 * * * *'
+  # Allows triggering the workflow manually from the GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  ping-services:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Frontend Keep-Alive Route
+        # This proxy route automatically hits the Render API /api/health endpoint,
+        # which in turn hits the ML service /health endpoint.
+        # Max-time 15s ensures the action completes quickly even if it's a cold start.
+        run: curl -s -m 15 https://vera.arinpattnaik.me/api/keep-alive || echo "Ping completed (startup initiated)"
