@@ -2,8 +2,9 @@ name: Keep VÉRA Backend Awake
 
 on:
   schedule:
-    # Runs every 14 minutes to prevent Render's 15-minute free tier spin-down
-    - cron: '*/14 * * * *'
+    # Runs every 8 minutes to prevent Render's 15-minute free tier spin-down
+    # (Using 8 minutes because GitHub Actions cron frequently runs late)
+    - cron: '*/8 * * * *'
   # Allows triggering the workflow manually from the GitHub Actions UI
   workflow_dispatch:
 

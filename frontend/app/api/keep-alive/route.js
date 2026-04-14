@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export const dynamic = 'force-dynamic';
+
+export async function GET(request) {
   const API_BASE = process.env.NEXT_PUBLIC_API_URL;
   
   if (!API_BASE) {
@@ -16,6 +18,7 @@ export async function GET() {
     // This simple GET request wakes up both Render instances if they are sleeping.
     const response = await fetch(`${API_BASE}/api/health`, {
       method: 'GET',
+      cache: 'no-store',
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Pragma': 'no-cache',
@@ -28,11 +31,20 @@ export async function GET() {
     }
     
     const data = await response.json();
-    return NextResponse.json({ success: true, backend_status: data });
+    return NextResponse.json({ 
+      success: true, 
+      backend_status: data,
+      timestamp: new Date().toISOString()
+    });
   } catch (error) {
     // We return 200 even on error so the cron job doesn't falsely report failure 
     // just because the server took slightly over the Vercel 10s timeout to wake up.
     // The initial request will still trigger Render to spin up the instance.
-    return NextResponse.json({ success: false, note: "Wake up initiated", error: error.message });
+    return NextResponse.json({ 
+      success: false, 
+      note: "Wake up initiated", 
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
   }
 }
