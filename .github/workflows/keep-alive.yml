@@ -12,8 +12,18 @@ jobs:
   ping-services:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Frontend Keep-Alive Route
-        # This proxy route automatically hits the Render API /api/health endpoint,
-        # which in turn hits the ML service /health endpoint.
-        # Max-time 15s ensures the action completes quickly even if it's a cold start.
-        run: curl -s -m 15 https://vera.arinpattnaik.me/api/keep-alive || echo "Ping completed (startup initiated)"
+      - name: Ping Backend (via Vercel keep-alive proxy)
+        # Wakes up vera-backend on Render via the Vercel frontend's proxy route.
+        # The backend's /api/health also pings the ML service health endpoint internally.
+        run: curl -s -m 30 https://vera.arinpattnaik.me/api/keep-alive || echo "Backend ping completed (cold start may still be in progress)"
+
+      - name: Ping ML Service directly
+        # Directly hits the ML service public URL to ensure it stays warm independently.
+        # This is critical — the backend health check has a 25s timeout which may not
+        # be enough when the ML service is cold-starting a heavy spaCy model.
+        # Uses a longer timeout (50s) to allow the Docker container to fully boot.
+        run: curl -s -m 50 https://vera-ml.onrender.com/health || echo "ML service ping completed (cold start may still be in progress)"
+
+      - name: Ping Backend directly
+        # Belt-and-suspenders: also ping the backend's health endpoint directly.
+        run: curl -s -m 30 https://vera-backend.onrender.com/api/health || echo "Backend direct ping completed"

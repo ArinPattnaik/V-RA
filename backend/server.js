@@ -216,7 +216,7 @@ app.get("/api/retailers", (req, res) => {
 app.get("/api/health", async (req, res) => {
   let mlHealthy = false;
   try {
-    const mlRes = await axios.get(`${ML_SERVICE_URL}/health`, { timeout: 5000 });
+    const mlRes = await axios.get(`${ML_SERVICE_URL}/health`, { timeout: 25000 });
     mlHealthy = mlRes.data.status === "healthy";
   } catch {}
 
