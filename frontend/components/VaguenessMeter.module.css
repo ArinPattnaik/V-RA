@@ -14,6 +14,10 @@
   display: block;
 }
 
+.gaugeTrack {
+  stroke: rgba(29, 28, 28, 0.1);
+}
+
 .progressArc {
   transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
 }
@@ -22,7 +26,7 @@
   fill: var(--text-primary);
   font-family: var(--font-heading);
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .gaugeLabel {
@@ -57,9 +61,9 @@
 
 .phrase {
   display: inline-block;
-  padding: 3px 10px;
-  background: rgba(139, 92, 246, 0.08);
-  border: 1px solid rgba(139, 92, 246, 0.15);
+  padding: 4px 12px;
+  background: var(--bg-card);
+  border: 1px solid rgba(124, 58, 237, 0.25);
   border-radius: var(--radius-full);
   font-size: 11px;
   font-family: var(--font-mono);
@@ -69,7 +73,7 @@
 .moreCount {
   display: inline-flex;
   align-items: center;
-  padding: 3px 10px;
+  padding: 4px 12px;
   font-size: 11px;
   font-family: var(--font-mono);
   color: var(--text-muted);

@@ -1,0 +1,22 @@
+.gradientBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(121deg, #ff158a -20.66%, #fff48d 65.83%);
+  background-size: 120% 120%;
+  animation: gradientShift 10s ease infinite;
+  border-radius: 0;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

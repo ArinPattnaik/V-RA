@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
 import styles from "./ScoreDisplay.module.css";
 
 function getScoreColor(score) {
@@ -21,42 +22,22 @@ function getScoreLabel(score) {
 
 export default function ScoreDisplay({ score, verdict, confidence }) {
   const [displayScore, setDisplayScore] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-    return () => observer.disconnect();
-  }, []);
+  const isInView = useInView(containerRef, { once: true, amount: 0.3 });
 
   // Animated counter
   useEffect(() => {
-    if (!isVisible || score === undefined) return;
+    if (!isInView || score === undefined) return;
 
     const duration = 1500;
     const steps = 60;
-    const increment = score / steps;
-    let current = 0;
     let step = 0;
 
     const timer = setInterval(() => {
       step++;
       // Easing: cubic ease-out
       const progress = 1 - Math.pow(1 - step / steps, 3);
-      current = score * progress;
-      setDisplayScore(current);
+      setDisplayScore(score * progress);
 
       if (step >= steps) {
         setDisplayScore(score);
@@ -65,15 +46,18 @@ export default function ScoreDisplay({ score, verdict, confidence }) {
     }, duration / steps);
 
     return () => clearInterval(timer);
-  }, [isVisible, score]);
+  }, [isInView, score]);
 
   const color = getScoreColor(score);
   const label = getScoreLabel(score);
 
   return (
-    <div
+    <motion.div
       ref={containerRef}
-      className={`${styles.container} ${isVisible ? styles.visible : ""}`}
+      className={styles.container}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* Ambient glow behind score */}
       <div
@@ -110,7 +94,7 @@ export default function ScoreDisplay({ score, verdict, confidence }) {
             <div
               className={styles.confidenceFill}
               style={{
-                width: isVisible ? `${confidence * 100}%` : "0%",
+                width: isInView ? `${confidence * 100}%` : "0%",
                 background: color,
               }}
             />
@@ -118,6 +102,6 @@ export default function ScoreDisplay({ score, verdict, confidence }) {
           <span className={styles.confidenceValue}>{Math.round(confidence * 100)}%</span>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

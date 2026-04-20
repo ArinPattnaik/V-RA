@@ -1,10 +1,10 @@
 /* ═══════════════════════════════════════════════════════════════
    VÉRA — Greenwashing NLP Scanner
-   Global Design System
+   Global Design System — Light Theme (Sowieso Wero-inspired)
    ═══════════════════════════════════════════════════════════════ */
 
 /* ── Google Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* ── CSS Reset ── */
 *, *::before, *::after {
@@ -15,38 +15,48 @@
 
 /* ── Design Tokens ── */
 :root {
-  /* Colors */
-  --bg-primary: #000000;
-  --bg-secondary: #080808;
-  --bg-card: rgba(255, 255, 255, 0.03);
-  --bg-card-hover: rgba(255, 255, 255, 0.06);
-  --bg-glass: rgba(255, 255, 255, 0.04);
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-active: rgba(255, 255, 255, 0.12);
+  /* Colors — Light Theme */
+  --bg-primary: #fafafa;
+  --bg-secondary: #f5f5f5;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --border-subtle: rgba(29, 28, 28, 0.1);
+  --border-active: rgba(29, 28, 28, 0.25);
+  --border-solid: #1d1c1c;
 
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.65);
-  --text-tertiary: rgba(255, 255, 255, 0.4);
-  --text-muted: rgba(255, 255, 255, 0.25);
+  --text-primary: #1d1c1c;
+  --text-secondary: rgba(29, 28, 28, 0.7);
+  --text-tertiary: rgba(29, 28, 28, 0.5);
+  --text-muted: rgba(29, 28, 28, 0.35);
 
-  /* Eco spectrum */
-  --eco-excellent: #00ff88;
-  --eco-good: #4ade80;
-  --eco-moderate: #facc15;
-  --eco-poor: #fb923c;
-  --eco-terrible: #ef4444;
+  /* Gradients — Wero-inspired */
+  --gradient-hero: linear-gradient(121deg, #ff158a -20.66%, #fff48d 65.83%);
+  --gradient-accent-1: linear-gradient(73deg, #7af7f7 10.27%, #83f582 91.46%);
+  --gradient-accent-2: linear-gradient(221deg, #fd97fd -1.12%, #fdad70 103%);
 
-  --green-glow: rgba(0, 255, 136, 0.15);
-  --green-border: rgba(0, 255, 136, 0.3);
-  --red-glow: rgba(239, 68, 68, 0.15);
-  --red-border: rgba(239, 68, 68, 0.3);
+  /* Eco spectrum — preserved, adjusted for light bg readability */
+  --eco-excellent: #00c96b;
+  --eco-good: #22b357;
+  --eco-moderate: #d4a017;
+  --eco-poor: #e07a2f;
+  --eco-terrible: #dc2626;
+
+  /* Raw eco spectrum (original values for score display) */
+  --eco-green-raw: #00ff88;
+  --eco-yellow-raw: #facc15;
+  --eco-red-raw: #ef4444;
+
+  --green-glow: rgba(0, 201, 107, 0.12);
+  --green-border: rgba(0, 201, 107, 0.3);
+  --red-glow: rgba(220, 38, 38, 0.12);
+  --red-border: rgba(220, 38, 38, 0.3);
 
   /* Accent */
-  --accent-green: #00ff88;
-  --accent-emerald: #10b981;
-  --accent-red: #ef4444;
-  --accent-amber: #f59e0b;
-  --accent-violet: #8b5cf6;
+  --accent-green: #00c96b;
+  --accent-emerald: #059669;
+  --accent-red: #dc2626;
+  --accent-amber: #d97706;
+  --accent-violet: #7c3aed;
 
   /* Typography */
   --font-heading: 'Space Grotesk', sans-serif;
@@ -70,6 +80,11 @@
   --radius-xl: 24px;
   --radius-full: 9999px;
 
+  /* Card — Wero-style solid shadow */
+  --card-border: 1px solid #1d1c1c;
+  --card-radius: 8px;
+  --card-shadow: 0 6px #1d1c1c;
+
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
   --transition-normal: 300ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -91,35 +106,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
-}
-
-/* ── Noise Texture Overlay ── */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── Subtle Grid Background ── */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
-  pointer-events: none;
-  z-index: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* ── Main Content ── */
@@ -131,34 +119,33 @@ main {
 /* ── Typography ── */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   line-height: 1.1;
+  text-transform: uppercase;
 }
 
-/* ── Glassmorphism Card ── */
+/* ── Wero-Style Card ── */
 .glass-card {
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
   transition: all var(--transition-normal);
 }
 
 .glass-card:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-active);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 9px #1d1c1c;
 }
 
-/* ── Glow Effects ── */
+/* ── Glow Effects (softened for light theme) ── */
 .glow-green {
-  box-shadow: 0 0 20px var(--green-glow), 0 0 60px rgba(0, 255, 136, 0.05);
+  box-shadow: var(--card-shadow), 0 0 20px var(--green-glow);
 }
 
 .glow-red {
-  box-shadow: 0 0 20px var(--red-glow), 0 0 60px rgba(239, 68, 68, 0.05);
+  box-shadow: var(--card-shadow), 0 0 20px var(--red-glow);
 }
 
 /* ── Animations ── */
@@ -215,17 +202,7 @@ h1, h2, h3, h4, h5, h6 {
 .animate-in-delay-5 { animation-delay: 0.5s; }
 .animate-in-delay-6 { animation-delay: 0.6s; }
 
-/* ── Scroll Reveal ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* ── Scroll Reveal (removed — replaced by Framer Motion ScrollReveal component) ── */
 
 /* ── Bento Grid ── */
 .bento-grid {
@@ -238,31 +215,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bento-card {
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
   padding: var(--space-lg);
   transition: all var(--transition-normal);
   overflow: hidden;
   position: relative;
 }
 
-.bento-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-}
-
 .bento-card:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-active);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 9px #1d1c1c;
 }
 
 /* Bento card sizes */
@@ -292,27 +257,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .badge-green {
-  background: rgba(0, 255, 136, 0.1);
+  background: rgba(0, 201, 107, 0.1);
   color: var(--eco-excellent);
-  border: 1px solid rgba(0, 255, 136, 0.2);
+  border: 1px solid rgba(0, 201, 107, 0.25);
 }
 
 .badge-red {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(220, 38, 38, 0.1);
   color: var(--eco-terrible);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(220, 38, 38, 0.25);
 }
 
 .badge-amber {
-  background: rgba(245, 158, 11, 0.1);
-  color: var(--eco-moderate);
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: rgba(217, 119, 6, 0.1);
+  color: var(--accent-amber);
+  border: 1px solid rgba(217, 119, 6, 0.25);
 }
 
 .badge-violet {
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(124, 58, 237, 0.1);
   color: var(--accent-violet);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(124, 58, 237, 0.25);
 }
 
 /* ── Severity Dots ── */
@@ -339,18 +304,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(29, 28, 28, 0.15);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(29, 28, 28, 0.3);
 }
 
 /* ── Selection ── */
 ::selection {
-  background: rgba(0, 255, 136, 0.2);
-  color: #fff;
+  background: rgba(0, 201, 107, 0.2);
+  color: #1d1c1c;
 }
 
 /* ── Responsive ── */
@@ -376,15 +341,40 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ── 320px minimum viewport support ── */
+@media (max-width: 380px) {
+  .bento-grid {
+    padding: 0 var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .bento-card {
+    padding: var(--space-md);
+  }
+}
+
 /* ── Loading Skeleton ── */
 .skeleton {
   background: linear-gradient(
     90deg,
-    rgba(255,255,255,0.03) 0%,
-    rgba(255,255,255,0.06) 50%,
-    rgba(255,255,255,0.03) 100%
+    rgba(29, 28, 28, 0.04) 0%,
+    rgba(29, 28, 28, 0.08) 50%,
+    rgba(29, 28, 28, 0.04) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
   border-radius: var(--radius-sm);
+}
+
+/* ── Reduced Motion ── */
+/* Disables/reduces CSS animations for users who prefer reduced motion.
+   Framer Motion respects this preference natively via the browser's
+   matchMedia('(prefers-reduced-motion: reduce)') — no extra code needed. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

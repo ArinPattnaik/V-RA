@@ -1,28 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useInView } from "framer-motion";
 import styles from "./VaguenessMeter.module.css";
 
 export default function VaguenessMeter({ score, phrases }) {
-  const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-    return () => observer.disconnect();
-  }, []);
+  const isInView = useInView(containerRef, { once: true, amount: 0.3 });
 
   // VaguenessScore is 1-10 where 10 = very specific (good) and 1 = very vague (bad)
   // For the meter, we show vagueness percentage (lower score = more vague)
@@ -67,7 +51,7 @@ export default function VaguenessMeter({ score, phrases }) {
             strokeWidth="8"
             strokeLinecap="round"
             strokeDasharray={circumference}
-            strokeDashoffset={isVisible ? offset : circumference}
+            strokeDashoffset={isInView ? offset : circumference}
             transform="rotate(-90 65 65)"
             className={styles.progressArc}
             style={{
@@ -76,7 +60,7 @@ export default function VaguenessMeter({ score, phrases }) {
           />
           {/* Center text */}
           <text x="65" y="60" textAnchor="middle" className={styles.gaugeValue}>
-            {isVisible ? vaguenessPercent : 0}%
+            {isInView ? vaguenessPercent : 0}%
           </text>
           <text x="65" y="78" textAnchor="middle" className={styles.gaugeLabel}>
             vague

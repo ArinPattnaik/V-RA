@@ -1,28 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useInView } from "framer-motion";
 import styles from "./CarbonTimeline.module.css";
 
 export default function CarbonTimeline({ brandData }) {
   const svgRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (svgRef.current) {
-      observer.observe(svgRef.current);
-    }
-    return () => observer.disconnect();
-  }, []);
+  const isInView = useInView(svgRef, { once: true, amount: 0.3 });
 
   if (!brandData || !brandData.emissions) {
     return (
@@ -90,7 +74,7 @@ export default function CarbonTimeline({ brandData }) {
       <div ref={svgRef} className={styles.chartWrapper}>
         <svg
           viewBox={`0 0 ${width} ${height}`}
-          className={`${styles.chart} ${isVisible ? styles.chartVisible : ""}`}
+          className={`${styles.chart} ${isInView ? styles.chartVisible : ""}`}
         >
           {/* Gradient fill */}
           <defs>
@@ -147,7 +131,7 @@ export default function CarbonTimeline({ brandData }) {
           <div
             className={styles.transparencyBar}
             style={{
-              width: isVisible ? `${transparency_score}%` : "0%",
+              width: isInView ? `${transparency_score}%` : "0%",
               background:
                 transparency_score >= 70
                   ? "#00ff88"

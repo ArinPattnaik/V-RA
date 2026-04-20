@@ -1,0 +1,161 @@
+/* ── Footer — Bento-grid layout ── */
+
+.footer {
+  border-top: 1px solid var(--border-solid);
+  padding: var(--space-2xl) var(--space-lg);
+  background: #fff48d;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  max-width: 800px;
+  margin: 0 auto var(--space-xl);
+}
+
+.card {
+  padding: var(--space-lg);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--card-radius);
+  box-shadow: 0 4px var(--border-solid);
+  transition: all var(--transition-fast);
+}
+
+.cardTitle {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.cardText {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* About card — cyan→green gradient */
+.aboutCard {
+  background: var(--gradient-accent-1);
+}
+
+/* How it works card — orange→pink gradient */
+.howCard {
+  background: var(--gradient-accent-2);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.stepNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+
+/* Links card — white */
+.linksCard {
+  background: var(--bg-card);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: var(--space-sm);
+  transition: color var(--transition-fast);
+}
+
+.link:hover {
+  color: var(--accent-green);
+}
+
+.credit {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+}
+
+/* CTA card — white */
+.ctaCard {
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.ctaBtn {
+  margin-top: var(--space-sm);
+  padding: 10px 24px;
+  background: var(--text-primary);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-full);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 3px var(--border-solid);
+  min-height: 44px;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px var(--border-solid);
+}
+
+.ctaBtn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px var(--border-solid);
+}
+
+.disclaimer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    padding: var(--space-xl) var(--space-md);
+  }
+}

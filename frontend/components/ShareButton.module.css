@@ -1,0 +1,73 @@
+/* ── ShareButton — Wero-style share dropdown ── */
+
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.shareBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 3px var(--border-solid);
+  min-height: 44px;
+}
+
+.shareBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px var(--border-solid);
+}
+
+.shareBtn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px var(--border-solid);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--card-radius);
+  box-shadow: 0 4px var(--border-solid);
+  overflow: hidden;
+  z-index: 50;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  text-align: left;
+  min-height: 44px;
+}
+
+.option:last-child {
+  border-bottom: none;
+}
+
+.option:hover {
+  background: var(--bg-secondary);
+}

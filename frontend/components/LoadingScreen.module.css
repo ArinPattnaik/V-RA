@@ -2,71 +2,35 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2xl);
-  padding: var(--space-4xl) 0;
-  min-height: 60vh;
+  gap: var(--space-xl);
+  padding: var(--space-4xl) var(--space-lg);
+  min-height: 40vh;
   justify-content: center;
 }
 
-/* ── Scanner Visual ── */
-.scannerVisual {
-  position: relative;
-  width: 140px;
-  height: 140px;
+/* ── Cold Start Message ── */
+.coldStart {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(217, 119, 6, 0.08);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  border-radius: var(--radius-full);
+  max-width: 480px;
+  width: 100%;
 }
 
-.scanRing {
-  position: absolute;
-  inset: 0;
-  border: 2px solid rgba(0, 255, 136, 0.15);
-  border-radius: 50%;
-  animation: rotate-slow 3s linear infinite;
+.coldStartIcon {
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
-.scanRingInner {
-  position: absolute;
-  top: -2px;
-  left: 50%;
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  background: var(--accent-green);
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-}
-
-@keyframes rotate-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.scanLine {
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  right: 10%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
-  transform: translateY(-50%);
-  animation: scan-pulse 2s ease-in-out infinite;
-}
-
-@keyframes scan-pulse {
-  0%, 100% { opacity: 0.3; transform: translateY(-50%) scaleX(0.5); }
-  50% { opacity: 1; transform: translateY(-50%) scaleX(1); }
-}
-
-.scanPulse {
-  position: absolute;
-  inset: 20%;
-  border: 1px solid rgba(0, 255, 136, 0.1);
-  border-radius: 50%;
-  animation: pulse-ring 2s ease-out infinite;
-}
-
-@keyframes pulse-ring {
-  0% { transform: scale(0.8); opacity: 1; }
-  100% { transform: scale(1.4); opacity: 0; }
+.coldStartText {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--accent-amber);
+  line-height: 1.4;
 }
 
 /* ── Steps ── */
@@ -74,39 +38,110 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
+  width: 100%;
+  max-width: 360px;
 }
 
 .step {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  font-size: 13px;
-  font-family: var(--font-mono);
-  color: var(--text-muted);
-  opacity: 0;
-  animation: step-appear 0.5s ease forwards;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
 }
 
-@keyframes step-appear {
-  from { opacity: 0; transform: translateX(-10px); }
-  to { opacity: 1; transform: translateX(0); }
+.stepActive {
+  background: rgba(0, 201, 107, 0.06);
 }
 
-.stepDot {
-  width: 6px;
-  height: 6px;
+.stepComplete {
+  opacity: 0.6;
+}
+
+.stepPending {
+  opacity: 0.35;
+}
+
+/* ── Step Indicator ── */
+.stepIndicator {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.checkmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: var(--accent-green);
-  flex-shrink: 0;
-  animation: dot-pulse 1s ease infinite;
-}
-
-@keyframes dot-pulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
-}
-
-.subtitle {
+  color: #fff;
   font-size: 12px;
+  font-weight: 700;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(0, 201, 107, 0.2);
+  border-top-color: var(--accent-green);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.pendingDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(29, 28, 28, 0.15);
+}
+
+/* ── Step Text ── */
+.stepText {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.stepActive .stepText {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.stepComplete .stepText {
+  text-decoration: line-through;
+  text-decoration-color: rgba(29, 28, 28, 0.2);
+}
+
+/* ── Timer ── */
+.timer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.timerLabel {
+  font-size: 11px;
+  font-family: var(--font-mono);
   color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timerValue {
+  font-size: 14px;
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
 }

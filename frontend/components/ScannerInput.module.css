@@ -9,10 +9,10 @@
   display: flex;
   gap: 4px;
   margin-bottom: var(--space-lg);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
   padding: 4px;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-solid);
 }
 
 .tab {
@@ -22,25 +22,26 @@
   justify-content: center;
   gap: 8px;
   padding: 10px 16px;
-  border: none;
+  border: 1px solid transparent;
   background: transparent;
   color: var(--text-tertiary);
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-full);
   transition: all var(--transition-fast);
 }
 
 .tab:hover {
   color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-card);
 }
 
 .tabActive {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--bg-card);
+  background: var(--text-primary);
+  border-color: var(--border-solid);
 }
 
 /* ── URL Input ── */
@@ -53,9 +54,9 @@
 .inputWrapper {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-full);
   padding: 6px 6px 6px 16px;
   transition: all var(--transition-normal);
   position: relative;
@@ -66,9 +67,9 @@
   content: '';
   position: absolute;
   inset: -1px;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-full);
   padding: 1px;
-  background: linear-gradient(135deg, transparent 40%, rgba(0, 255, 136, 0) 40%);
+  background: linear-gradient(135deg, transparent 40%, rgba(0, 201, 107, 0) 40%);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   -webkit-mask-composite: xor;
@@ -77,8 +78,8 @@
 }
 
 .inputFocused {
-  border-color: var(--green-border);
-  box-shadow: 0 0 30px var(--green-glow), 0 0 60px rgba(0, 255, 136, 0.05);
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 3px var(--green-glow);
 }
 
 .inputFocused::before {
@@ -88,6 +89,7 @@
 .inputIcon {
   flex-shrink: 0;
   margin-right: 12px;
+  color: var(--text-muted);
 }
 
 .input {
@@ -112,23 +114,28 @@
   align-items: center;
   gap: 8px;
   padding: 10px 24px;
-  border: none;
+  border: 1px solid var(--border-solid);
   background: var(--accent-green);
-  color: #000;
+  color: var(--text-primary);
   font-family: var(--font-heading);
   font-size: 14px;
   font-weight: 600;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   cursor: pointer;
   transition: all var(--transition-fast);
   white-space: nowrap;
   flex-shrink: 0;
+  box-shadow: 0 4px var(--border-solid);
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: #33ff9e;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px var(--border-solid);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px var(--border-solid);
 }
 
 .submitBtn:disabled {
@@ -140,8 +147,8 @@
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-top-color: #000;
+  border: 2px solid rgba(29, 28, 28, 0.2);
+  border-top-color: var(--text-primary);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
@@ -160,11 +167,16 @@
 
 /* ── Textarea ── */
 .textareaWrapper {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
   border-radius: var(--radius-lg);
   padding: var(--space-md);
   transition: all var(--transition-normal);
+}
+
+.textareaWrapper:focus-within {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 3px var(--green-glow);
 }
 
 .textarea {
@@ -208,9 +220,10 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-md) var(--space-lg);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--card-radius);
+  box-shadow: 0 4px var(--border-solid);
   cursor: pointer;
   transition: all var(--transition-normal);
   color: var(--text-primary);
@@ -219,9 +232,13 @@
 }
 
 .demoCard:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: var(--border-active);
-  transform: translateX(4px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px var(--border-solid);
+}
+
+.demoCard:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px var(--border-solid);
 }
 
 .demoCard:disabled {
@@ -238,6 +255,7 @@
 .demoName {
   font-size: 14px;
   font-weight: 500;
+  color: var(--text-primary);
 }
 
 .demoTag {
@@ -255,6 +273,7 @@
 .demoArrow {
   opacity: 0.3;
   transition: all var(--transition-fast);
+  color: var(--text-primary);
 }
 
 .demoCard:hover .demoArrow {
@@ -271,9 +290,62 @@
   .tab {
     font-size: 12px;
     padding: 8px 12px;
+    min-height: 44px;
   }
   .submitBtn {
     padding: 10px 16px;
     font-size: 13px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabs {
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+  }
+
+  .tab {
+    border-radius: var(--radius-md);
+    justify-content: flex-start;
+    padding: 10px 16px;
+    min-height: 44px;
+  }
+
+  .inputWrapper {
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .inputIcon {
+    display: none;
+  }
+
+  .input {
+    width: 100%;
+    padding: 10px var(--space-sm);
+  }
+
+  .submitBtn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .textActions {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .textActions .submitBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .demoCard {
+    padding: var(--space-md);
+    min-height: 44px;
   }
 }

@@ -1,0 +1,331 @@
+/* ── ComparisonMode — Wero-style dual product comparison ── */
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2xl);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 3px var(--border-solid);
+  min-height: 44px;
+}
+
+.backBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px var(--border-solid);
+}
+
+.backBtn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px var(--border-solid);
+}
+
+/* ── Sides layout ── */
+.sides {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+  margin-bottom: var(--space-2xl);
+}
+
+.side {
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: var(--space-lg);
+  min-height: 200px;
+}
+
+.sideLabel {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+}
+
+/* ── Side result card ── */
+.sideResult {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+}
+
+.productName {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.scoreCircle {
+  font-family: var(--font-heading);
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.verdict {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.rescanBtn {
+  margin-top: var(--space-sm);
+  padding: 6px 16px;
+  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.rescanBtn:hover {
+  border-color: var(--border-solid);
+  color: var(--text-primary);
+}
+
+/* ── Side error ── */
+.sideError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  padding: var(--space-md);
+}
+
+.sideErrorIcon {
+  font-size: 24px;
+}
+
+.sideError p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.retryBtn {
+  padding: 8px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 3px var(--border-solid);
+  min-height: 44px;
+}
+
+.retryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px var(--border-solid);
+}
+
+/* ── VS Divider ── */
+.vsDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+.vsText {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Comparison breakdown ── */
+.comparison {
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: var(--space-xl);
+}
+
+.comparisonTitle {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.comparisonRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-md);
+  align-items: center;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.comparisonRow:last-child {
+  border-bottom: none;
+}
+
+.comparisonCell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+/* Color coding */
+.better {
+  background: rgba(0, 201, 107, 0.1);
+}
+
+.worse {
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.neutral {
+  background: rgba(29, 28, 28, 0.04);
+}
+
+.comparisonScore {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.comparisonCatScore {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.comparisonLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.comparisonLabelIcon {
+  font-size: 14px;
+}
+
+.comparisonWeight {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .sides {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .vsDivider {
+    padding-top: 0;
+    padding: var(--space-sm) 0;
+  }
+
+  .comparisonRow {
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-sm);
+  }
+
+  .comparisonScore {
+    font-size: 22px;
+  }
+
+  .comparisonCatScore {
+    font-size: 18px;
+  }
+
+  .comparisonLabel {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .side {
+    padding: var(--space-md);
+  }
+
+  .scoreCircle {
+    font-size: 40px;
+  }
+}

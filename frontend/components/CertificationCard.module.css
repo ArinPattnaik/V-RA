@@ -15,7 +15,7 @@
   align-items: center;
   gap: var(--space-sm);
   padding-bottom: var(--space-xs);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 2px solid var(--border-subtle);
 }
 
 .sectionIcon {
@@ -33,22 +33,22 @@
 .sectionTitle {
   font-family: var(--font-heading);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .cert {
   padding: var(--space-sm) var(--space-md);
-  background: rgba(0, 255, 136, 0.03);
-  border: 1px solid rgba(0, 255, 136, 0.08);
+  background: rgba(0, 201, 107, 0.06);
+  border: 1px solid var(--green-border);
   border-radius: var(--radius-sm);
 }
 
 .certFake {
-  background: rgba(239, 68, 68, 0.03);
-  border-color: rgba(239, 68, 68, 0.08);
+  background: rgba(220, 38, 38, 0.06);
+  border-color: var(--red-border);
 }
 
 .certHeader {
@@ -75,7 +75,7 @@
 
 .certDesc {
   font-size: 12px;
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
@@ -95,7 +95,7 @@
 
 .empty p {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   font-weight: 500;
 }
 

@@ -60,6 +60,7 @@
   font-size: 13px;
   font-family: var(--font-mono);
   font-weight: 600;
+  color: var(--text-primary);
   min-width: 40px;
   text-align: right;
 }
@@ -75,6 +76,7 @@
 .summaryItem {
   font-size: 12px;
   font-family: var(--font-mono);
+  color: var(--text-secondary);
 }
 
 .empty {
