@@ -3,11 +3,16 @@
  * Express server that orchestrates scraping and ML analysis.
  */
 
+const startTime = Date.now();
 const express = require("express");
-const cors = require("cors");
-const rateLimit = require("express-rate-limit");
 const axios = require("axios");
+const rateLimit = require("express-rate-limit");
 const { ProductScraper, RETAILER_CONFIGS } = require("./scraper");
+const { helmetMiddleware, requireJson } = require("./middleware/security");
+const { createCorsMiddleware } = require("./middleware/cors");
+const { requestLogger, logInfo, logError } = require("./middleware/logger");
+const { globalErrorHandler, notFoundHandler } = require("./middleware/errorHandler");
+const { validateUrl, validateText, validateDemoId } = require("./middleware/validation");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -16,20 +21,89 @@ if (process.env.ML_SERVICE_URL && !process.env.ML_SERVICE_URL.startsWith("http")
   ML_SERVICE_URL = `http://${process.env.ML_SERVICE_URL}`;
 }
 
-// ── Middleware ──
-app.use(cors());
+// ── Middleware (order matters) ──
+
+// 1. Security headers
+app.use(helmetMiddleware);
+
+// 2. CORS
+app.use(createCorsMiddleware());
+
+// 3. Body parser
 app.use(express.json({ limit: "1mb" }));
 
-// Rate limiting: 20 requests per minute per IP
+// 4. Content-Type check for POST
+app.use(requireJson);
+
+// 5. Request logger
+app.use(requestLogger);
+
+// 6. Rate limiter
 const limiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 20,
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 60000,
+  max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 20,
+  standardHeaders: true,
+  legacyHeaders: false,
   message: { error: "Too many requests. Please wait a minute." },
 });
 app.use("/api/", limiter);
 
 // ── Scraper Instance ──
 const scraper = new ProductScraper();
+
+// ── Helper: Validate ML response shape ──
+
+/**
+ * Check that an ML service response has the expected shape.
+ * Returns true only when response is an object with success === true and data is an object.
+ * @param {any} body
+ * @returns {boolean}
+ */
+function isValidMlResponse(body) {
+  return (
+    body != null &&
+    typeof body === "object" &&
+    body.success === true &&
+    body.data != null &&
+    typeof body.data === "object" &&
+    !Array.isArray(body.data)
+  );
+}
+
+/**
+ * Classify an axios error from the ML service and send the appropriate response.
+ * @param {Error} error - The caught error
+ * @param {import('express').Response} res
+ * @param {string} context - Log context label
+ */
+function handleMlError(error, res, context) {
+  logError("ML", `${context}: ${error.message}`);
+
+  if (error.code === "ECONNREFUSED") {
+    return res.status(503).json({
+      error: "ML service is unavailable. Please try again later.",
+    });
+  }
+
+  if (error.code === "ETIMEDOUT" || error.code === "ECONNABORTED") {
+    return res.status(503).json({
+      error: "ML service timed out. Please try again later.",
+    });
+  }
+
+  if (error.response) {
+    const status = error.response.status;
+    return res.status(503).json({
+      error: "ML service encountered an error",
+      details: `ML service returned status ${status}`,
+    });
+  }
+
+  return res.status(500).json({
+    error: "Analysis failed. Please try again.",
+    details: error.message,
+  });
+}
 
 // ─────────────────────────────────────────────────────────────
 // API ROUTES
@@ -43,10 +117,20 @@ app.post("/api/analyze", async (req, res) => {
   const { text, brand } = req.body;
   let url = req.body.url;
 
+  // Validate URL if provided
   if (url && typeof url === "string") {
-    url = url.trim();
-    if (!url.startsWith("http")) {
-      url = `https://${url}`;
+    const urlResult = validateUrl(url);
+    if (!urlResult.valid) {
+      return res.status(400).json({ error: urlResult.error });
+    }
+    url = urlResult.sanitized;
+  }
+
+  // Validate text if provided
+  if (text && typeof text === "string") {
+    const textResult = validateText(text);
+    if (!textResult.valid) {
+      return res.status(400).json({ error: textResult.error });
     }
   }
 
@@ -64,7 +148,7 @@ app.post("/api/analyze", async (req, res) => {
 
     // ── Step 1: Scrape if URL provided ──
     if (url && !text) {
-      console.log(`[SCRAPE] Scraping: ${url}`);
+      logInfo("SCRAPE", `Scraping: ${url}`);
       const scrapeResult = await scraper.scrape(url);
 
       if (!scrapeResult.success) {
@@ -99,7 +183,7 @@ app.post("/api/analyze", async (req, res) => {
     }
 
     // ── Step 2: Send to ML service ──
-    console.log(`[ANALYZE] Sending ${analysisText.length} chars to ML service`);
+    logInfo("ML", `Sending ${analysisText.length} chars to ML service`);
 
     const mlResponse = await axios.post(`${ML_SERVICE_URL}/analyze`, {
       text: analysisText,
@@ -109,33 +193,30 @@ app.post("/api/analyze", async (req, res) => {
       timeout: 90000,
     });
 
-    if (!mlResponse.data.success) {
-      throw new Error("ML service returned an error");
+    // Validate ML response shape
+    if (!isValidMlResponse(mlResponse.data)) {
+      return res.status(502).json({
+        error: "Invalid response from ML service",
+      });
     }
 
     // ── Step 3: Return combined result ──
+    const method = url ? "scraped" : "manual";
+    if (method === "manual") {
+      productInfo = {};
+    }
+
     return res.json({
       success: true,
       product: productInfo,
       analysis: mlResponse.data.data,
       input: {
         text_length: analysisText.length,
-        method: url ? "scraped" : "manual",
+        method,
       },
     });
   } catch (error) {
-    console.error(`[ERROR] Analysis failed:`, error.message);
-
-    if (error.code === "ECONNREFUSED") {
-      return res.status(503).json({
-        error: "ML service is unavailable. Please try again later.",
-      });
-    }
-
-    return res.status(500).json({
-      error: "Analysis failed. Please try again.",
-      details: error.message,
-    });
+    return handleMlError(error, res, "Analysis failed");
   }
 });
 
@@ -150,6 +231,12 @@ app.post("/api/analyze/demo", async (req, res) => {
     return res.status(400).json({ error: "product_id is required" });
   }
 
+  // Validate demo ID
+  const demoResult = validateDemoId(product_id);
+  if (!demoResult.valid) {
+    return res.status(400).json({ error: demoResult.error });
+  }
+
   try {
     const mlResponse = await axios.post(`${ML_SERVICE_URL}/analyze/demo`, {
       product_id,
@@ -157,18 +244,24 @@ app.post("/api/analyze/demo", async (req, res) => {
       timeout: 90000,
     });
 
+    // Validate ML response shape
+    if (!isValidMlResponse(mlResponse.data)) {
+      return res.status(502).json({
+        error: "Invalid response from ML service",
+      });
+    }
+
     return res.json({
       success: true,
-      product: mlResponse.data.product,
+      product: mlResponse.data.product || {},
       analysis: mlResponse.data.data,
-      input: { method: "demo" },
+      input: {
+        method: "demo",
+        text_length: 0,
+      },
     });
   } catch (error) {
-    console.error(`[ERROR] Demo analysis failed:`, error.message);
-    return res.status(500).json({
-      error: "Demo analysis failed.",
-      details: error.message,
-    });
+    return handleMlError(error, res, "Demo analysis failed");
   }
 });
 
@@ -181,6 +274,7 @@ app.get("/api/demo/products", async (req, res) => {
     const mlResponse = await axios.get(`${ML_SERVICE_URL}/demo/products`);
     return res.json(mlResponse.data);
   } catch (error) {
+    logError("ML", `Could not fetch demo products: ${error.message}`);
     return res.status(500).json({ error: "Could not fetch demo products" });
   }
 });
@@ -194,6 +288,7 @@ app.get("/api/brands", async (req, res) => {
     const mlResponse = await axios.get(`${ML_SERVICE_URL}/brands`);
     return res.json(mlResponse.data);
   } catch (error) {
+    logError("ML", `Could not fetch brand data: ${error.message}`);
     return res.status(500).json({ error: "Could not fetch brand data" });
   }
 });
@@ -216,21 +311,41 @@ app.get("/api/retailers", (req, res) => {
 app.get("/api/health", async (req, res) => {
   let mlHealthy = false;
   try {
-    const mlRes = await axios.get(`${ML_SERVICE_URL}/health`, { timeout: 25000 });
+    const mlRes = await axios.get(`${ML_SERVICE_URL}/health`, { timeout: 5000 });
     mlHealthy = mlRes.data.status === "healthy";
-  } catch {}
+  } catch {
+    // ML service is disconnected — that's fine
+  }
 
   return res.json({
     status: "healthy",
     service: "vera-backend",
     ml_service: mlHealthy ? "connected" : "disconnected",
     version: "1.0.0",
+    uptime: Math.floor(process.uptime()),
   });
 });
 
+// ── 404 and Error Handlers (must be last) ──
+app.use(notFoundHandler);
+app.use(globalErrorHandler);
+
 // ── Start Server ──
-app.listen(PORT, () => {
-  console.log(`\n🌿 VÉRA Backend running on port ${PORT}`);
-  console.log(`   ML Service: ${ML_SERVICE_URL}`);
-  console.log(`   Health: http://localhost:${PORT}/api/health\n`);
+const server = app.listen(PORT, () => {
+  logInfo("SERVER", `VÉRA Backend running on port ${PORT}`);
+  logInfo("SERVER", `ML Service: ${ML_SERVICE_URL}`);
+  logInfo("SERVER", `Health: http://localhost:${PORT}/api/health`);
+  logInfo("SERVER", `Started in ${Date.now() - startTime}ms`);
 });
+
+server.timeout = 120000;
+
+// ── Graceful Shutdown ──
+process.on("SIGTERM", () => {
+  logInfo("SERVER", "SIGTERM received");
+  server.close();
+  setTimeout(() => process.exit(0), 10000);
+});
+
+// Export for testing
+module.exports = { app, server, isValidMlResponse };

@@ -106,9 +106,15 @@ function getRandomUA() {
 class ProductScraper {
   /**
    * Detect which retailer config to use from the URL.
+   * Returns null for malformed URLs instead of throwing.
    */
   _getRetailerConfig(url) {
-    const hostname = new URL(url).hostname.replace("www.", "").replace("www2.", "");
+    let hostname;
+    try {
+      hostname = new URL(url).hostname.replace("www.", "").replace("www2.", "");
+    } catch {
+      return null;
+    }
     for (const [domain, config] of Object.entries(RETAILER_CONFIGS)) {
       if (hostname.includes(domain)) {
         return config;
@@ -169,6 +175,17 @@ class ProductScraper {
    * Scrape a product page and extract structured data.
    */
   async scrape(url) {
+    // Validate URL before proceeding
+    try {
+      new URL(url);
+    } catch {
+      return {
+        success: false,
+        error: "Invalid URL format.",
+        suggestion: "Please provide a valid product URL or paste the product description text manually.",
+      };
+    }
+
     const config = this._getRetailerConfig(url);
 
     // Strategy 1: Direct HTTP fetch
