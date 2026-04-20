@@ -26,4 +26,4 @@ jobs:
 
       - name: Ping Backend directly
         # Belt-and-suspenders: also ping the backend's health endpoint directly.
-        run: curl -s -m 30 https://vera-backend.onrender.com/api/health || echo "Backend direct ping completed"
+        run: curl -s -m 30 https://vera-backend-ouka.onrender.com/api/health || echo "Backend direct ping completed"
