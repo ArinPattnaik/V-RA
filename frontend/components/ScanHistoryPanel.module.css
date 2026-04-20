@@ -180,3 +180,22 @@
 .clearBtn:hover {
   background: rgba(220, 38, 38, 0.06);
 }
+
+@media (max-width: 480px) {
+  .panel {
+    width: 100vw;
+    max-width: 100vw;
+  }
+
+  .header {
+    padding: var(--space-md);
+  }
+
+  .itemName {
+    font-size: 12px;
+  }
+
+  .itemScore {
+    font-size: 18px;
+  }
+}

@@ -113,3 +113,27 @@
   min-width: 32px;
   text-align: right;
 }
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-2xl) 0;
+  }
+
+  .ambientGlow {
+    width: 300px;
+    height: 300px;
+  }
+
+  .score {
+    font-size: clamp(72px, 18vw, 120px);
+  }
+
+  .verdict {
+    font-size: 14px;
+    padding: 0 var(--space-md);
+  }
+
+  .confidence {
+    max-width: 260px;
+  }
+}

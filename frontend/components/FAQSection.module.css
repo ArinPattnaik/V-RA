@@ -97,3 +97,22 @@
     font-size: 13px;
   }
 }
+
+@media (max-width: 480px) {
+  .section {
+    padding: var(--space-xl) var(--space-sm);
+  }
+
+  .sectionTitle {
+    font-size: clamp(20px, 5vw, 28px);
+  }
+
+  .question {
+    font-size: 13px;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .answer {
+    font-size: 13px;
+  }
+}

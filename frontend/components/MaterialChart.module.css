@@ -93,3 +93,18 @@
   font-size: 24px;
   opacity: 0.5;
 }
+
+@media (max-width: 480px) {
+  .name {
+    font-size: 13px;
+  }
+
+  .percentage {
+    font-size: 12px;
+  }
+
+  .summary {
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+}

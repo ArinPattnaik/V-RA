@@ -145,3 +145,26 @@
   color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
 }
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-2xl) var(--space-md);
+    gap: var(--space-lg);
+  }
+
+  .coldStart {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .coldStartText {
+    font-size: 12px;
+  }
+
+  .steps {
+    max-width: 100%;
+  }
+
+  .stepText {
+    font-size: 12px;
+  }
+}

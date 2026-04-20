@@ -7,6 +7,8 @@
   background-size: 120% 120%;
   animation: gradientShift 10s ease infinite;
   border-radius: 0;
+  will-change: background-position;
+  transform: translateZ(0);
 }
 
 @keyframes gradientShift {

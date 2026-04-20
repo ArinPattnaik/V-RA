@@ -159,3 +159,21 @@
     padding: var(--space-xl) var(--space-md);
   }
 }
+
+@media (max-width: 480px) {
+  .footer {
+    padding: var(--space-lg) var(--space-sm);
+  }
+
+  .card {
+    padding: var(--space-md);
+  }
+
+  .cardTitle {
+    font-size: 14px;
+  }
+
+  .cardText {
+    font-size: 12px;
+  }
+}

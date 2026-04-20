@@ -318,7 +318,11 @@
 
 @media (max-width: 480px) {
   .container {
-    padding: var(--space-xl) var(--space-md);
+    padding: var(--space-lg) var(--space-sm);
+  }
+
+  .title {
+    font-size: clamp(20px, 5vw, 28px);
   }
 
   .side {
@@ -327,5 +331,21 @@
 
   .scoreCircle {
     font-size: 40px;
+  }
+
+  .comparisonRow {
+    gap: var(--space-xs);
+  }
+
+  .comparisonScore {
+    font-size: 18px;
+  }
+
+  .comparisonCatScore {
+    font-size: 16px;
+  }
+
+  .comparisonLabel {
+    font-size: 10px;
   }
 }

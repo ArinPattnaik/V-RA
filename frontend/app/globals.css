@@ -97,6 +97,12 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Improve touch scrolling */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  /* Prevent font size inflation on iOS */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -228,6 +234,7 @@ h1, h2, h3, h4, h5, h6 {
 .bento-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 9px #1d1c1c;
+  will-change: transform;
 }
 
 /* Bento card sizes */
@@ -329,10 +336,19 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+@media (max-width: 768px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 16px;
+  }
+}
+
 @media (max-width: 640px) {
   .bento-grid {
     grid-template-columns: 1fr;
-    padding: 0 var(--space-md);
+    gap: 10px;
+    padding: 0 12px;
   }
   .bento-card.span-2,
   .bento-card.span-3,
@@ -344,12 +360,13 @@ h1, h2, h3, h4, h5, h6 {
 /* ── 320px minimum viewport support ── */
 @media (max-width: 380px) {
   .bento-grid {
-    padding: 0 var(--space-sm);
-    gap: var(--space-sm);
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 0 8px;
   }
 
   .bento-card {
-    padding: var(--space-md);
+    padding: 12px;
   }
 }
 

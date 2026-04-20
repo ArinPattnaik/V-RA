@@ -494,9 +494,8 @@
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .hero {
-    padding: var(--space-3xl) var(--space-md);
-    min-height: auto;
-    padding-top: 100px;
+    padding: 80px var(--space-md) var(--space-2xl);
+    min-height: 100svh;
   }
 
   .subScores {
@@ -514,8 +513,17 @@
   }
 
   .hero {
-    padding: var(--space-2xl) var(--space-sm);
-    padding-top: 80px;
+    padding: 60px var(--space-sm) var(--space-xl);
+  }
+
+  .heroSubtitle {
+    font-size: 15px;
+  }
+
+  .heroTag {
+    font-size: 10px;
+    padding: 4px 12px;
+    margin-bottom: var(--space-lg);
   }
 
   .resultsSection {
@@ -526,23 +534,34 @@
     font-size: 16px;
   }
 
+  .backBar {
+    padding: var(--space-md) 0 var(--space-sm);
+  }
+
   .subScores {
-    gap: var(--space-md);
+    gap: var(--space-sm);
+    padding: var(--space-md);
   }
 
   .subScoreValue {
-    font-size: 22px;
+    font-size: 20px;
+  }
+
+  .flag {
+    font-size: 12px;
+    padding: var(--space-xs) var(--space-sm);
   }
 
   .resetSection {
     flex-direction: column;
     align-items: center;
-    padding: var(--space-2xl) 0 var(--space-xl);
+    padding: var(--space-xl) 0;
   }
 
   .resetBtn {
     width: 100%;
     justify-content: center;
+    font-size: 14px;
   }
 
   .retailerLogos {
@@ -552,5 +571,11 @@
   .retailerBadge {
     font-size: 10px;
     padding: 3px 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .heroTitleAccent {
+    font-size: clamp(52px, 14vw, 80px);
   }
 }
