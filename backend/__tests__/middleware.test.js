@@ -100,6 +100,18 @@ describe('CORS Middleware', () => {
 
       const res = await request(app)
         .get('/test')
+        .set('Origin', 'https://vera.arinpattnaik.me');
+
+      expect(res.headers['access-control-allow-origin']).toBe('https://vera.arinpattnaik.me');
+    });
+
+    it('should allow the Vercel production domain', async () => {
+      const app = express();
+      app.use(createCorsMiddleware());
+      app.get('/test', (req, res) => res.json({ ok: true }));
+
+      const res = await request(app)
+        .get('/test')
         .set('Origin', 'https://vera-scanner.vercel.app');
 
       expect(res.headers['access-control-allow-origin']).toBe('https://vera-scanner.vercel.app');

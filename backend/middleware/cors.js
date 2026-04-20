@@ -12,6 +12,7 @@ const cors = require('cors');
  */
 function buildOriginList() {
   const origins = [
+    'https://vera.arinpattnaik.me',
     'https://vera-scanner.vercel.app',
     /\.vercel\.app$/,
     'http://localhost:3000',

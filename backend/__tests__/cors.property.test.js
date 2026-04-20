@@ -10,6 +10,7 @@ const { isOriginAllowed, buildOriginList } = require('../middleware/cors');
 
 // The default whitelist (without env var overrides)
 const DEFAULT_ORIGINS = [
+  'https://vera.arinpattnaik.me',
   'https://vera-scanner.vercel.app',
   /\.vercel\.app$/,
   'http://localhost:3000',
@@ -21,6 +22,7 @@ const DEFAULT_ORIGINS = [
  * This is the reference implementation for property testing.
  */
 function shouldBeAllowed(origin) {
+  if (origin === 'https://vera.arinpattnaik.me') return true;
   if (origin === 'https://vera-scanner.vercel.app') return true;
   if (/\.vercel\.app$/.test(origin)) return true;
   if (origin === 'http://localhost:3000') return true;
