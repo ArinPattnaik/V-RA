@@ -229,6 +229,16 @@ export default function Home() {
         {state === "results" && result && (
           <motion.div key="results" {...pageTransition}>
             <section ref={resultsRef} className={styles.resultsSection}>
+
+              {/* Back button */}
+              <div className={styles.backBar}>
+                <button className={styles.backBtn} onClick={handleReset}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                  Back
+                </button>
+              </div>
               {/* Product info banner */}
               {product && product.name && (
                 <ScrollReveal>

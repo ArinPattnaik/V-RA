@@ -256,6 +256,39 @@
   margin: 0 auto;
 }
 
+/* Back bar */
+.backBar {
+  padding: var(--space-xl) 0 var(--space-md);
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 3px var(--border-solid);
+  min-height: 44px;
+}
+
+.backBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px var(--border-solid);
+}
+
+.backBtn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px var(--border-solid);
+}
+
 /* Product Banner */
 .productBanner {
   text-align: center;
